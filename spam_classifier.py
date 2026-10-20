@@ -10,6 +10,8 @@ messages = [("spam", "WINNER! You have won a FREE prize. Claim now!"),
     ("ham",  "Call me when you get home, mom wants to talk."),]
 
 tokenized = []
+spam = {}
+ham = {}
 
 def mtoken(messages):
     for i in range(len(messages)):
@@ -28,7 +30,37 @@ def mtoken(messages):
 
 mtoken(messages)
 
-print(tokenized)
-  
+def count_totalmessages(tokenized):
+
+    totalmessages_ham = 0
+    totalmessages_spam = 0
+
+    for i in range(len(tokenized)):
+        temp = tokenized[i]
         
+        if temp[0] == "spam":
+            totalmessages_spam += 1
+        else: 
+            totalmessages_ham += 1
+
+    return totalmessages_ham, totalmessages_spam
+
+def count_totalwords(tokenized):
+
+    totalwords_ham = 0
+    totalwords_spam = 0
+
+    for i in range(len(tokenized)):
+        temp = tokenized[i]
+
+        if temp[0] == "spam":
+            totalwords_spam += len(temp[1])
+        else:
+            totalwords_ham += len(temp[1])
+
+    return totalwords_ham, totalwords_spam
+
+ham_msgs, spam_msgs = count_totalmessages(tokenized)
+
+print("Messages: " + str(ham_msgs), str(spam_msgs))
         
