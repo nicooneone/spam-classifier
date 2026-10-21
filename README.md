@@ -43,11 +43,19 @@ SMS Spam Collection from the UCI Machine Learning Repository, created by Tiago A
 
 ##Functions
 organize: Reads the dataset file and organizes it into a list of tuples. The first item in each tuple is the label (spam or ham), and the second is the message itself.
+
 splitdata: Splits the data so that 80% is used to train the model and the other 20% is used to test its accuracy.
+
 tokenize & mtoken: Tokenizing turns a message into a list of clean words: everything is lowercased, split into individual words, and stripped of punctuation. tokenize handles one message, and mtoken handles the whole list of labeled messages.
+
 count_totalmessages: Counts how many spam messages and how many ham messages are in the training data.
+
 count_totalwords: Counts the total number of words in spam messages and in ham messages.
+
 train: Builds the model. It goes through the tokenized training messages and, based on each message's label, counts every word in either the spam dictionary or the ham dictionary. The first time a word is seen in a class, it's added with a count of 1; after that, its count goes up by 1 each time. It also counts the vocabulary size (the number of unique words across both classes), which is needed for smoothing.
+
 score: Calculates how well a message fits one class. It starts with the fraction of training messages in that class, then multiplies in the smoothed probability of each word in the message.
+
 classify: Tokenizes a message, scores it as spam and as ham, and returns whichever label scored higher.
+
 evaluate: Tests the model on the test set. Each test message is classified and compared to its real label, which gives the accuracy and the catch rate.
