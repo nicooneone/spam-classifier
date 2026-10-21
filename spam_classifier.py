@@ -9,6 +9,24 @@ messages = [("spam", "WINNER! You have won a FREE prize. Claim now!"),
     ("ham",  "Are you free this weekend? Want to grab dinner?"),
     ("ham",  "Call me when you get home, mom wants to talk."),]
 
+def organize(dataset):
+
+    nlist = []
+
+    with open(dataset) as s:
+        for i in s:
+            
+            i_s = i.strip("\n")
+            i_ss = i_s.split("\t")
+
+            newt = (i_ss[0], i_ss[1])
+
+            nlist.append(newt)
+
+    return nlist
+
+messages = (organize("SMSSpamCollection"))
+
 tokenized = []
 
 def tokenize(text):
@@ -135,4 +153,5 @@ def classify(your_message, spam, ham, totalmessages_spam, totalmessages_ham, tot
     else:
         return "ham"
 
-print(classify("Win free money", spam, ham, totalmessages_spam, totalmessages_ham, totalwords_ham, totalwords_spam, vocab_size))        
+print(classify("Win free money", spam, ham, totalmessages_spam, totalmessages_ham, totalwords_ham, totalwords_spam, vocab_size))     
+print(totalmessages_ham)  
