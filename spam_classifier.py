@@ -75,6 +75,7 @@ def train(tokenized):
     
     spam = {}
     ham = {}
+    vocab_size = 0
 
     for i in range(len(tokenized)):
 
@@ -83,22 +84,28 @@ def train(tokenized):
         
         if temp[0] == "spam":
            for j in range(len(temp[1])):
+    
                if mes[j] not in spam:
+                   if mes[j] not in ham:
+                        vocab_size += 1
                    spam[mes[j]] = 1
                else:
                    spam[mes[j]] += 1
         else:
             for k in range(len(temp[1])):
+               
                 if mes[k] not in ham:
+                    if mes[k] not in spam:
+                        vocab_size += 1
                     ham[mes[k]] = 1
                 else:
                     ham[mes[k]] += 1
 
-    return ham, spam
+    return ham, spam, vocab_size
 
-ham, spam = train(tokenized)
+ham, spam, vocab_size = train(tokenized)
             
-def score(messages, word_counts, total_words, class_messages, total_messages):
+def score(messages, word_counts, total_words, class_messages, total_messages, vocab_size):
     
     score1 = 1
     final_score = 0
@@ -106,26 +113,26 @@ def score(messages, word_counts, total_words, class_messages, total_messages):
     for word in messages:
         
         if word in word_counts: 
-            score1 = (word_counts[word]/total_words) * score1
+            score1 = ((word_counts[word] + 1)/(total_words + vocab_size)) * score1
         else:
-            score1 = (0/total_words) * score1
+            score1 = (1/(total_words + vocab_size)) * score1
     
     final_score = (class_messages/total_messages) * score1
 
     return final_score
 
-def classify(your_message, spam, ham, totalmessages_spam, totalmessages_ham, totalwords_ham, totalwords_spam):
+def classify(your_message, spam, ham, totalmessages_spam, totalmessages_ham, totalwords_ham, totalwords_spam, vocab_size):
     
     your_message = tokenize(your_message)
 
     total_messages = totalmessages_spam + totalmessages_ham
 
-    spam_score = score(your_message, spam, totalwords_spam, totalmessages_spam, total_messages)
-    ham_score = score(your_message, ham,  totalwords_ham,  totalmessages_ham,  total_messages)
+    spam_score = score(your_message, spam, totalwords_spam, totalmessages_spam, total_messages, vocab_size)
+    ham_score = score(your_message, ham,  totalwords_ham,  totalmessages_ham,  total_messages, vocab_size)
 
     if spam_score > ham_score:
         return "spam"
     else:
         return "ham"
 
-print(classify("Claim your free cash prize now", spam, ham, totalmessages_spam, totalmessages_ham, totalwords_ham, totalwords_spam))        
+print(classify("Win free money", spam, ham, totalmessages_spam, totalmessages_ham, totalwords_ham, totalwords_spam, vocab_size))        
